@@ -8,6 +8,10 @@ const server = () => {
     restifyServer.listen(PORT, () => {
       console.log(`Server started at localhost:${PORT}`)
     })
+
+    restifyServer.get("/hi", (req, res) => {
+      res.send(200, "Hello");
+    })
   }
 
   const getServer = () => restifyServer;
