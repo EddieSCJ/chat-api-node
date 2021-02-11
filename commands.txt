@@ -6,3 +6,6 @@
 
 3. CREATE MESSAGE
     docker-compose exec kafka /opt/kafka_2.11-1.1.0/bin/kafka-console-producer.sh  --broker-list localhost:9092 --topic chat-topic
+
+4. CONSUME
+    docker-compose exec kafka /opt/kafka_2.11-1.1.0/bin/kafka-console-consumer.sh --zookeeper zookeeper:2181 --topic chat-api
