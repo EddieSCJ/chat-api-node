@@ -1,40 +1,31 @@
 const Kafka = require('kafka-node');
+const kafkaServer = "kafka:9092";
+const Producer = Kafka.Producer;
+const Consumer = Kafka.Consumer;
+const client = new Kafka.KafkaClient({ kafkaHost: kafkaServer });
+const producer = new Producer(client);
 
 const kafka = () => {
-  const kafkaServer = "kafka:9092";
-  const Producer = Kafka.Producer;
-  const Consumer = Kafka.Consumer;
-  const client = new Kafka.KafkaClient({ kafkaHost: kafkaServer });
-  const producer = new Producer(client);
 
-  const send = (topic, message) => {
-    const payloads = [{ topic, messages: message }];
+  const setup = () => {
+    let topicsToCreate = [{
+      topic: 'chat-topic',
+      partitions: 1,
+      replicationFactor: 1
+    }];
+    client.createTopics(topicsToCreate, ((error, result) => error ? console.log(error) : console.log(result)));
 
-    producer.on("ready", () => {
-      producer.send(payloads, (err, data) => {
-        if (err) {
-          console.log(`Erro na hora de enviar: ${err}`);
-          return;
-        }
-        console.log(`Operação Efetuada com sucesso: ${data}`);
-      })
+    producer.on("error", function (err) {
+      console.log("Erro ao enviar: ", err)
     })
-  }
 
-  const consume = (topic) => {
-    const consumer = new Consumer(client, [{ topic }], { autoCommit: false, encoding: 'utf-8' });
-    consumer.on("message", async (message) => {
-      console.log(message);
-    });
-
-    consumer.on('error', function (err) {
-      console.log('error', err);
-    });
   }
 
   return {
-    send,
-    consume
+    setup,
+    producer,
+    client,
+    Consumer
   }
 }
 
