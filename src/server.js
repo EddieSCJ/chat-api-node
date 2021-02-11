@@ -11,6 +11,8 @@ const server = () => {
     }
   );
 
+  restifyServer.use(restify.plugins.bodyParser({ mapParams: true }));
+
   const start = () => {
     const PORT = 8080;
     restifyServer.listen(PORT, () => {
