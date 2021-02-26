@@ -1,4 +1,5 @@
 const { producer, Consumer, client } = require('./kafka');
+const socket = require('./../server/socket').getSocket();
 
 const KafkaService = () => {
 
@@ -16,7 +17,7 @@ const KafkaService = () => {
   const consume = (topic) => {
     const consumer = new Consumer(client, [{ topic }], { autoCommit: false, encoding: 'utf-8' });
     consumer.on("message", async (message) => {
-      console.log(message);
+      socket.emit("message", JSON.parse(message.value));
     });
   }
 

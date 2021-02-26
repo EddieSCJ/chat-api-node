@@ -1,10 +1,8 @@
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware');
 const restifyServer = restify.createServer();
-const io = require('socket.io');
 
 const server = () => {
-
   const cors = corsMiddleware({
     preflightMaxAge: 5,
     origins: ["*"],
@@ -23,26 +21,12 @@ const server = () => {
     })
   }
 
-  const startWebSocket = () => {
-    const config = {
-      cors: {
-        origin: "*",
-        methods: ["*"],
-        allowedHeaders: ["*"],
-        credentials: true
-      }
-    }
-
-    const socket = io(restifyServer.server, config);
-    socket.on('connection', (socket) => console.log('Connected'))
-  }
 
   const getServer = () => restifyServer;
 
   return {
     start,
-    getServer,
-    startWebSocket
+    getServer
   }
 }
 
