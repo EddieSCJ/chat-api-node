@@ -1,11 +1,11 @@
-const Server = require('./../server');
+const Server = require('../server/server');
 const KafkaService = require('./../kafka/kafkaService');
 const server = Server.getServer();
 const routes = require('./../routes/routes');
 
 const messageController = () => {
   const startPost = () => {
-    server.post(routes.messages, (req, res, next) => {
+    server.post(routes.messages.post, (req, res, next) => {
       const { username, message } = req.body;
       let finalMessage = JSON.stringify({ username, message });
       KafkaService.send('chat-topic', finalMessage)

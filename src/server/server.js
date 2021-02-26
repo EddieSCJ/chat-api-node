@@ -1,16 +1,18 @@
 const restify = require('restify');
+const corsMiddleware = require('restify-cors-middleware');
 const restifyServer = restify.createServer();
 
 const server = () => {
 
-  restifyServer.use(
-    function crossOrigin(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "X-Requested-With");
-      return next();
-    }
-  );
+  const cors = corsMiddleware({
+    preflightMaxAge: 5,
+    origins: ["*"],
+    allowHeaders: ["*"],
+    exposeHeaders: ["*"]
+  })
 
+  restifyServer.pre(cors.preflight);
+  restifyServer.use(cors.actual);
   restifyServer.use(restify.plugins.bodyParser({ mapParams: true }));
 
   const start = () => {
