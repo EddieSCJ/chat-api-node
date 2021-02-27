@@ -17,4 +17,6 @@ docker build -t chat-api .
 docker-compose -up
 ```
 
+**It will run at localhost:8080**
+
 Enjoy the project and any doubt, just contact me by email.
